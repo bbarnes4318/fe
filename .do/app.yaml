@@ -12,21 +12,8 @@ services:
   instance_size_slug: basic-xxs
   health_check:
     http_path: /health
-    initial_delay_seconds: 10
-    interval_seconds: 30
-    timeout_seconds: 10
-    unhealthy_threshold: 3
-    healthy_threshold: 2
   envs:
   - key: NODE_ENV
     value: production
   - key: PORT
     value: "8080"
-  - key: GOOGLE_SHEETS_ID
-    value: "YOUR_SHEET_ID_HERE"
-  - key: GOOGLE_PROJECT_ID
-    value: "YOUR_PROJECT_ID_HERE"
-  - key: GOOGLE_CLIENT_EMAIL
-    value: "YOUR_CLIENT_EMAIL_HERE"
-  - key: GOOGLE_PRIVATE_KEY
-    value: "YOUR_PRIVATE_KEY_HERE"
