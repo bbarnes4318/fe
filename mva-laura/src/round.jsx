@@ -263,6 +263,9 @@ export default function RoundupLandingPage() {
         tcpa_opt_in: form.tcpa_opt_in ? 'Yes' : 'No',
         // Additional fields from the form
         exposure_type: form.exposureType,
+        exposure_year: form.exposureYear,
+        exposure_frequency_per_year: form.exposureFrequencyPerYear,
+        exposure_years_duration: form.exposureYearsDuration,
         diagnosis: form.diagnosis,
         diagnosis_year: form.diagnosisYear,
         age_at_diagnosis: form.ageAtDiagnosis,
