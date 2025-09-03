@@ -1,0 +1,12 @@
+# Don't ignore these important files
+!mva-laura/
+!package.json
+!.do/
+!README.md
+
+# But ignore these
+node_modules/
+.env
+*.log
+.DS_Store
+Thumbs.db

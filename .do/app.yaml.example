@@ -23,10 +23,10 @@ services:
   - key: PORT
     value: "8080"
   - key: GOOGLE_SHEETS_ID
-    value: "YOUR_SHEET_ID_HERE"
+    value: "your_actual_sheet_id"
   - key: GOOGLE_PROJECT_ID
-    value: "YOUR_PROJECT_ID_HERE"
+    value: "your_actual_project_id"
   - key: GOOGLE_CLIENT_EMAIL
-    value: "YOUR_CLIENT_EMAIL_HERE"
+    value: "your_service_account@project.iam.gserviceaccount.com"
   - key: GOOGLE_PRIVATE_KEY
-    value: "YOUR_PRIVATE_KEY_HERE"
+    value: "-----BEGIN PRIVATE KEY-----\nYour actual private key here\n-----END PRIVATE KEY-----"
