@@ -1,0 +1,18 @@
+{
+  "name": "round",
+  "version": "1.0.0",
+  "description": "Round application with webhook and Google Sheets integration",
+  "main": "mva-laura/index.js",
+  "engines": {
+    "node": "18.x"
+  },
+  "scripts": {
+    "start": "node mva-laura/index.js",
+    "dev": "node mva-laura/index.js",
+    "build": "cd mva-laura && npm run build",
+    "postinstall": "cd mva-laura && npm install"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

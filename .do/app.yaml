@@ -1,0 +1,19 @@
+name: round
+services:
+- name: round-app
+  source_dir: /
+  github:
+    repo: bbarnes4318/round
+    branch: main
+  run_command: npm start
+  build_command: npm run build
+  environment_slug: node-js
+  instance_count: 1
+  instance_size_slug: basic-xxs
+  health_check:
+    http_path: /health
+  envs:
+  - key: NODE_ENV
+    value: production
+  - key: PORT
+    value: "8080"
