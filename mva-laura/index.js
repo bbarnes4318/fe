@@ -27,60 +27,48 @@ app.use(bodyParser.json({ limit: '1mb' }));
 app.use(bodyParser.urlencoded({ extended: true, limit: '1mb' }));
 
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 5000;
-const SHEET_TITLE = 'roundup'; // Changed from 'mva' to 'roundup'
+const SHEET_TITLE = 'depo'; // Changed to 'depo' for Depo-Provera cases
 
 // Remove TrackDrive API configuration since we don't need it
 // const TRACKDRIVE_API_URL = 'https://ramonmarquez.trackdrive.com/api/v1/leads';
 // const LEAD_TOKEN = '74aae788dcb64a4c8c5328176bb6403a';
 
-// Updated headers for Google Sheets - exact fields from the Roundup form
+// Updated headers for Google Sheets - exact fields from the Depo-Provera form
 const HEADERS = [
-  'first_name',
-  'last_name',
+  'full_name',
   'phone',
   'email',
-  'exposure_type',
-  'exposure_year',
-  'exposure_frequency_per_year',
-  'exposure_years_duration',
-  'diagnosis',
-  'diagnosis_year',
-  'age_at_diagnosis',
+  'gender',
+  'date_of_birth',
+  'address',
+  'city',
   'state',
-  'represented',
-  'disqualifiers',
-  'contact_time',
-  'notes',
-  'consent',
-  'ip_address',
-  'source_url',
-  'trusted_form_cert_url',
-  'submission_timestamp'
+  'postal_code',
+  'country_diagnosis',
+  'date_of_exposure',
+  'brief_description_of_your_situation',
+  'tcpa_consent_given',
+  'xxTrustedFormCertUrl',
+  'timestamp'
 ];
 
-// Field mapping from form to Google Sheets
+// Field mapping from form to Google Sheets (direct mapping for Depo-Provera form)
 const FIELD_MAPPING = {
-  first_name: 'first_name',
-  last_name: 'last_name',
-  phone: 'caller_id',
+  full_name: 'full_name',
+  phone: 'phone',
   email: 'email',
-  exposure_type: 'exposure_type',
-  exposure_year: 'exposure_year',
-  exposure_frequency_per_year: 'exposure_frequency_per_year',
-  exposure_years_duration: 'exposure_years_duration',
-  diagnosis: 'diagnosis',
-  diagnosis_year: 'diagnosis_year',
-  age_at_diagnosis: 'age_at_diagnosis',
+  gender: 'gender',
+  date_of_birth: 'date_of_birth',
+  address: 'address',
+  city: 'city',
   state: 'state',
-  represented: 'represented',
-  disqualifiers: 'disqualifiers',
-  contact_time: 'contact_time',
-  notes: 'notes',
-  consent: 'tcpa_opt_in',
-  ip_address: 'ip_address',
-  source_url: 'source_url',
-  trusted_form_cert_url: 'trusted_form_cert_url',
-  submission_timestamp: 'submission_timestamp'
+  postal_code: 'postal_code',
+  country_diagnosis: 'country_diagnosis',
+  date_of_exposure: 'date_of_exposure',
+  brief_description_of_your_situation: 'brief_description_of_your_situation',
+  tcpa_consent_given: 'tcpa_consent_given',
+  xxTrustedFormCertUrl: 'xxTrustedFormCertUrl',
+  timestamp: 'timestamp'
 };
 
 let sheetReady = false;
@@ -134,32 +122,14 @@ app.post('/webhook', async (req, res) => {
     
     // Build the row for Google Sheets in the exact headers order
     const row = HEADERS.map((key) => {
-      let value = cleanPayload[FIELD_MAPPING[key]];
+      let value = cleanPayload[key];
       
       // Handle special mappings for Google Sheets
-      if (key === 'trusted_form_cert_url' && !value) {
+      if (key === 'xxTrustedFormCertUrl' && !value) {
         value = cleanPayload.xxTrustedFormCertUrl; // Map Trusted Form field
       }
-      if (key === 'ip_address' && !value) {
-        value = req.ip || req.connection.remoteAddress || req.headers['x-forwarded-for'] || '';
-      }
-      if (key === 'source_url' && !value) {
-        value = 'https://mva-laura-i3vvi.ondigitalocean.app/';
-      }
-      if (key === 'submission_timestamp' && !value) {
+      if (key === 'timestamp' && !value) {
         value = new Date().toISOString(); // Add current timestamp
-      }
-      
-      // Handle special field formatting
-      if (key === 'disqualifiers' && value) {
-        // Convert disqualifiers object to readable string
-        if (typeof value === 'object') {
-          const selectedDisqualifiers = Object.entries(value)
-            .filter(([k, v]) => v === true)
-            .map(([k]) => k)
-            .join(', ');
-          value = selectedDisqualifiers || 'None';
-        }
       }
       
       if (typeof value === 'boolean') return value ? 'Yes' : 'No';
@@ -234,32 +204,14 @@ app.post('/test-webhook', (req, res) => {
   
   // Build the Google Sheets row (without actually sending)
   const row = HEADERS.map((key) => {
-    let value = cleanPayload[FIELD_MAPPING[key]];
+    let value = cleanPayload[key];
     
     // Handle special mappings for Google Sheets
-    if (key === 'trusted_form_cert_url' && !value) {
+    if (key === 'xxTrustedFormCertUrl' && !value) {
       value = cleanPayload.xxTrustedFormCertUrl; // Map Trusted Form field
     }
-    if (key === 'ip_address' && !value) {
-      value = req.ip || req.connection.remoteAddress || req.headers['x-forwarded-for'] || '';
-    }
-    if (key === 'source_url' && !value) {
-      value = 'https://mva-laura-i3vvi.ondigitalocean.app/';
-    }
-    if (key === 'submission_timestamp' && !value) {
+    if (key === 'timestamp' && !value) {
       value = new Date().toISOString(); // Add current timestamp
-    }
-    
-    // Handle special field formatting
-    if (key === 'disqualifiers' && value) {
-      // Convert disqualifiers object to readable string
-      if (typeof value === 'object') {
-        const selectedDisqualifiers = Object.entries(value)
-          .filter(([k, v]) => v === true)
-          .map(([k]) => k)
-          .join(', ');
-        value = selectedDisqualifiers || 'None';
-      }
     }
     
     if (typeof value === 'boolean') return value ? 'Yes' : 'No';
@@ -282,7 +234,7 @@ app.use((req, res) => {
     error: 'Not Found',
     message: 'Available endpoints:',
           endpoints: {
-        'GET /': 'Landing page (Roundup form)',
+        'GET /': 'Landing page (Depo-Provera form)',
         'POST /webhook': 'Submit form data to Google Sheets',
         'POST /test-webhook': 'Test endpoint to verify payload structure (no actual submission)',
         'GET /health': 'Health check',

@@ -1,6 +1,6 @@
-# Round Application
+# Depo-Provera Meningioma Legal Consultation
 
-A Node.js application with Express backend and React frontend that provides webhook functionality and Google Sheets integration.
+A Node.js application with Express backend and React frontend that provides a single-page landing page for individuals diagnosed with Meningioma after using Depo-Provera. The application includes form submission functionality with Google Sheets integration and TrustedForm compliance.
 
 ## Structure
 
@@ -9,6 +9,14 @@ A Node.js application with Express backend and React frontend that provides webh
   - `src/` - React frontend source code
   - `build/` - Built React application
   - `package.json` - Application dependencies
+
+## Features
+
+- Single-page responsive form design
+- TrustedForm integration for compliance
+- Google Sheets integration (sheet name: 'depo')
+- Form validation and error handling
+- Clean, professional UI design
 
 ## Deployment
 
@@ -28,9 +36,19 @@ Required environment variables (set in DigitalOcean App Platform):
 
 ## API Endpoints
 
-- `GET /health` - Health check endpoint
+- `GET /` - Landing page with Depo-Provera form
 - `POST /webhook` - Main webhook endpoint for form submissions
+- `POST /test-webhook` - Test endpoint to verify payload structure
+- `GET /health` - Health check endpoint
 - `GET /debug/env` - Environment variable debug endpoint
+
+## Form Fields
+
+The form collects the following information:
+- Personal details (name, phone, email, gender, date of birth)
+- Address information (address, city, state, postal code)
+- Medical information (date of exposure to Depo-Provera, brief description)
+- Hidden fields for compliance (country_diagnosis, tcpa_consent_given, xxTrustedFormCertUrl, timestamp)
 
 ## Health Check
 
