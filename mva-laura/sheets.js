@@ -20,26 +20,35 @@ async function getSheetsClient() {
   assertEnv();
 
   let privateKey = process.env.GOOGLE_PRIVATE_KEY;
+  
+  console.log('DEBUG: Original private key length:', privateKey ? privateKey.length : 'undefined');
+  console.log('DEBUG: Private key starts with:', privateKey ? privateKey.substring(0, 50) : 'undefined');
    
   // Handle different key formats
-  if (privateKey.includes('\\n')) {
+  if (privateKey && privateKey.includes('\\n')) {
     privateKey = privateKey.replace(/\\n/g, '\n');
+    console.log('DEBUG: Replaced \\n with actual newlines');
   }
   
   // Strip quotes if present
-  if ((privateKey.startsWith('"') && privateKey.endsWith('"')) || 
-      (privateKey.startsWith("'") && privateKey.endsWith("'"))) {
+  if (privateKey && ((privateKey.startsWith('"') && privateKey.endsWith('"')) || 
+      (privateKey.startsWith("'") && privateKey.endsWith("'")))) {
     privateKey = privateKey.slice(1, -1);
+    console.log('DEBUG: Stripped quotes from private key');
   }
 
   // Ensure the private key has proper formatting and handle line breaks
-  if (!privateKey.includes('-----BEGIN PRIVATE KEY-----')) {
+  if (privateKey && !privateKey.includes('-----BEGIN PRIVATE KEY-----')) {
     // If it's a raw key, wrap it properly
     privateKey = `-----BEGIN PRIVATE KEY-----\n${privateKey}\n-----END PRIVATE KEY-----`;
-  } else {
+    console.log('DEBUG: Wrapped raw key with proper headers');
+  } else if (privateKey) {
     // Ensure proper line breaks for existing formatted keys
     privateKey = privateKey.replace(/\\n/g, '\n');
+    console.log('DEBUG: Ensured proper line breaks in formatted key');
   }
+  
+  console.log('DEBUG: Final private key length:', privateKey ? privateKey.length : 'undefined');
 
   // Use GoogleAuth which is more compatible with newer Node.js versions
   const auth = new google.auth.GoogleAuth({
