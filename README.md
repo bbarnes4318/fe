@@ -1,6 +1,6 @@
-# Depo-Provera Meningioma Legal Consultation
+# Final Expense Insurance Landing Page
 
-A Node.js application with Express backend and React frontend that provides a single-page landing page for individuals diagnosed with Meningioma after using Depo-Provera. The application includes form submission functionality with Google Sheets integration and TrustedForm compliance.
+A Node.js application with Express backend and React frontend that provides a single-page landing page for individuals interested in final expense insurance. The application includes form submission functionality with Google Sheets integration and TrustedForm compliance.
 
 ## Structure
 
@@ -14,7 +14,7 @@ A Node.js application with Express backend and React frontend that provides a si
 
 - Single-page responsive form design
 - TrustedForm integration for compliance
-- Google Sheets integration (sheet name: 'depo')
+- Google Sheets integration (sheet name: 'fe')
 - Form validation and error handling
 - Clean, professional UI design
 
@@ -36,7 +36,7 @@ Required environment variables (set in DigitalOcean App Platform):
 
 ## API Endpoints
 
-- `GET /` - Landing page with Depo-Provera form
+- `GET /` - Landing page with Final Expense Insurance form
 - `POST /webhook` - Main webhook endpoint for form submissions
 - `POST /test-webhook` - Test endpoint to verify payload structure
 - `GET /health` - Health check endpoint
@@ -46,9 +46,8 @@ Required environment variables (set in DigitalOcean App Platform):
 
 The form collects the following information:
 - Personal details (name, phone, email, gender, date of birth)
-- Address information (address, city, state, postal code)
-- Medical information (date of exposure to Depo-Provera, brief description)
-- Hidden fields for compliance (country_diagnosis, tcpa_consent_given, xxTrustedFormCertUrl, timestamp)
+- Location information (state)
+- Hidden fields for compliance (tcpa_consent_given, xxTrustedFormCertUrl, timestamp)
 
 ## Health Check
 

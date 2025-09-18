@@ -27,45 +27,33 @@ app.use(bodyParser.json({ limit: '1mb' }));
 app.use(bodyParser.urlencoded({ extended: true, limit: '1mb' }));
 
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 5000;
-const SHEET_TITLE = 'depo'; // Changed to 'depo' for Depo-Provera cases
+const SHEET_TITLE = 'fe'; // Changed to 'fe' for final expense insurance
 
 // Remove TrackDrive API configuration since we don't need it
 // const TRACKDRIVE_API_URL = 'https://ramonmarquez.trackdrive.com/api/v1/leads';
 // const LEAD_TOKEN = '74aae788dcb64a4c8c5328176bb6403a';
 
-// Updated headers for Google Sheets - exact fields from the Depo-Provera form
+// Updated headers for Google Sheets - exact fields from the final expense insurance form
 const HEADERS = [
   'full_name',
   'phone',
   'email',
   'gender',
   'date_of_birth',
-  'address',
-  'city',
   'state',
-  'postal_code',
-  'country_diagnosis',
-  'date_of_exposure',
-  'brief_description_of_your_situation',
   'tcpa_consent_given',
   'xxTrustedFormCertUrl',
   'timestamp'
 ];
 
-// Field mapping from form to Google Sheets (direct mapping for Depo-Provera form)
+// Field mapping from form to Google Sheets (direct mapping for final expense insurance form)
 const FIELD_MAPPING = {
   full_name: 'full_name',
   phone: 'phone',
   email: 'email',
   gender: 'gender',
   date_of_birth: 'date_of_birth',
-  address: 'address',
-  city: 'city',
   state: 'state',
-  postal_code: 'postal_code',
-  country_diagnosis: 'country_diagnosis',
-  date_of_exposure: 'date_of_exposure',
-  brief_description_of_your_situation: 'brief_description_of_your_situation',
   tcpa_consent_given: 'tcpa_consent_given',
   xxTrustedFormCertUrl: 'xxTrustedFormCertUrl',
   timestamp: 'timestamp'
@@ -234,7 +222,7 @@ app.use((req, res) => {
     error: 'Not Found',
     message: 'Available endpoints:',
           endpoints: {
-        'GET /': 'Landing page (Depo-Provera form)',
+        'GET /': 'Landing page (Final Expense Insurance form)',
         'POST /webhook': 'Submit form data to Google Sheets',
         'POST /test-webhook': 'Test endpoint to verify payload structure (no actual submission)',
         'GET /health': 'Health check',
