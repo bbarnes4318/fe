@@ -6,7 +6,7 @@ const axios = require('axios');
 const path = require('path'); // Added for serving static files
 
 // Load sheets module AFTER dotenv config
-const { getSheetsClient, ensureSheetAndHeaders, appendRowToSheet } = require('./sheets');
+const { getSheetsClient, getSpreadsheet, ensureSheetAndHeaders, appendRowToSheet } = require('./sheets');
 
 const app = express();
 
