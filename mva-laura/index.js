@@ -149,6 +149,9 @@ app.post('/webhook', async (req, res) => {
       if (key === 'timestamp' && !value) {
         value = new Date().toISOString(); // Add current timestamp
       }
+      if (key === 'tcpa_consent_given' && !value) {
+        value = 'Yes'; // Default value
+      }
       
       if (typeof value === 'boolean') return value ? 'Yes' : 'No';
       if (value === null || value === undefined) return '';
