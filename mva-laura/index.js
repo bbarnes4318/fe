@@ -75,8 +75,38 @@ app.get('/debug/env', (_req, res) => {
   for (const k of required) {
     const present = !!(process.env[k] && String(process.env[k]).trim() !== '');
     status[k] = present ? 'OK' : 'MISSING';
+    if (k === 'GOOGLE_PRIVATE_KEY' && present) {
+      status[k + '_length'] = process.env[k].length;
+      status[k + '_starts_with'] = process.env[k].substring(0, 20) + '...';
+    }
   }
   res.json(status);
+});
+
+// Test Google Sheets connection
+app.get('/debug/sheets', async (_req, res) => {
+  try {
+    console.log('Testing Google Sheets connection...');
+    const sheets = await getSheetsClient();
+    console.log('Sheets client created successfully');
+    
+    const spreadsheet = await getSpreadsheet(sheets);
+    console.log('Spreadsheet accessed successfully');
+    
+    res.json({
+      success: true,
+      spreadsheet_title: spreadsheet.properties.title,
+      sheets: spreadsheet.sheets.map(s => s.properties.title),
+      message: 'Google Sheets connection successful'
+    });
+  } catch (error) {
+    console.error('Google Sheets test error:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+      details: error.response?.data || 'No additional details'
+    });
+  }
 });
 
 app.get('/', (req, res) => {
@@ -129,20 +159,34 @@ app.post('/webhook', async (req, res) => {
 
     // Send to Google Sheets
     try {
+      console.log('Attempting to connect to Google Sheets...');
+      console.log('Sheet title:', SHEET_TITLE);
+      console.log('Headers:', HEADERS);
+      console.log('Row data:', row);
+      
       const sheets = await getSheetsClient();
+      console.log('Google Sheets client created successfully');
 
       if (!sheetReady) {
+        console.log('Setting up sheet and headers...');
         await ensureSheetAndHeaders(sheets, SHEET_TITLE, HEADERS);
         sheetReady = true;
+        console.log('Sheet and headers setup complete');
       }
 
+      console.log('Appending row to sheet...');
       await appendRowToSheet(sheets, SHEET_TITLE, row);
 
       console.log('Google Sheets: Row appended successfully');
     } catch (sheetsError) {
-      console.error('Google Sheets error:', sheetsError);
+      console.error('Google Sheets error details:', {
+        message: sheetsError.message,
+        code: sheetsError.code,
+        status: sheetsError.status,
+        response: sheetsError.response?.data,
+        stack: sheetsError.stack
+      });
       // Don't fail the entire request if Google Sheets fails
-      // The TrackDrive API already succeeded
     }
 
     res.json({ 
